@@ -51,3 +51,44 @@ if (percentage_positive != percentage_negative) {
 } else {
   cat("\nThe dataset appears balanced.\n")
 }
+
+##Data Cleaning
+# 1. Identify and display duplicate entries
+duplicate_rows <- data[duplicated(data), ]
+cat("Duplicate entries in the dataset:\n")
+print(duplicate_rows)
+
+# Remove duplicate entries and keep only unique rows
+data <- data[!duplicated(data), ]
+#Checking for Duplicate Entries
+duplicate_entries <- sum(duplicated(data))
+cat("\nNumber of duplicate entries:", duplicate_entries)
+
+# Checking for Bias after removal of duplicate entries
+positive_reviews <- data %>% filter(sentiment == "positive")
+negative_reviews <- data %>% filter(sentiment == "negative")
+
+total_positive_reviews <- nrow(positive_reviews)
+total_negative_reviews <- nrow(negative_reviews)
+
+cat("\nClass Distribution:\n")
+cat("Number of Positive Reviews:", total_positive_reviews, "\n")
+cat("Number of Negative Reviews:", total_negative_reviews, "\n")
+
+# Calculate the percentage of positive and negative reviews
+percentage_positive <- (total_positive_reviews / nrow(data)) * 100
+percentage_negative <- (total_negative_reviews / nrow(data)) * 100
+
+cat("\nPercentage of Positive Reviews:", percentage_positive, "\n")
+cat("Percentage of Negative Reviews:", percentage_negative, "\n")
+
+# Check for bias
+if (abs(percentage_positive- percentage_negative)>5) {
+  cat("\nThe dataset may be biased.\n")
+} else {
+  cat("\nThe dataset appears balanced.\n")
+}
+
+#2. Convert text to lowercase and remove special characters and numbers
+data$review <- tolower(data$review)
+data$review <- gsub("[^a-zA-Z ]", "", data$review)
