@@ -89,6 +89,14 @@ if (abs(percentage_positive- percentage_negative)>5) {
   cat("\nThe dataset appears balanced.\n")
 }
 
-#2. Convert text to lowercase and remove special characters and numbers
+# 2. Convert text to lowercase 
 data$review <- tolower(data$review)
 data$review <- gsub("[^a-zA-Z ]", "", data$review)
+
+# 3. Removing special characters and numbers
+library(tm)
+corpus <- Corpus(VectorSource(data$review))
+corpus <- tm_map(corpus, content_transformer(tolower))
+corpus <- tm_map(corpus, removePunctuation)
+corpus <- tm_map(corpus, removeNumbers)
+
