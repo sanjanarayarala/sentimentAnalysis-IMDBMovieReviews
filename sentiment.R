@@ -93,10 +93,14 @@ if (abs(percentage_positive- percentage_negative)>5) {
 data$review <- tolower(data$review)
 data$review <- gsub("[^a-zA-Z ]", "", data$review)
 
-# 3. Removing special characters and numbers
+# 3. Removing special characters, numbers and punctuations
 library(tm)
 corpus <- Corpus(VectorSource(data$review))
 corpus <- tm_map(corpus, content_transformer(tolower))
 corpus <- tm_map(corpus, removePunctuation)
 corpus <- tm_map(corpus, removeNumbers)
+
+# 4. Removing Stopwords
+corpus <- tm_map(corpus, removeWords, stopwords("english"))
+data$review <- sapply(corpus, function(x) paste(unlist(strsplit(x, " ")), collapse=" "))
 
