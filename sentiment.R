@@ -104,3 +104,10 @@ corpus <- tm_map(corpus, removeNumbers)
 corpus <- tm_map(corpus, removeWords, stopwords("english"))
 data$review <- sapply(corpus, function(x) paste(unlist(strsplit(x, " ")), collapse=" "))
 
+# Data Visualization
+# 1. Visualize the distribution of sentiment labels
+library(ggplot2)
+ggplot(data, aes(x = sentiment)) +
+  geom_bar(fill = "skyblue") +
+  labs(title = "Distribution of Sentiment Labels", x = "Sentiment", y = "Count")
+
