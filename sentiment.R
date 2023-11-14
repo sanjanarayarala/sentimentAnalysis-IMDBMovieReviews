@@ -29,6 +29,7 @@ cat("\nNumber of duplicate entries:", duplicate_entries)
 
 # 5. Checking for Bias
 positive_reviews <- data %>% filter(sentiment == "positive")
+
 negative_reviews <- data %>% filter(sentiment == "negative")
 
 total_positive_reviews <- nrow(positive_reviews)
@@ -110,4 +111,25 @@ library(ggplot2)
 ggplot(data, aes(x = sentiment)) +
   geom_bar(fill = "skyblue") +
   labs(title = "Distribution of Sentiment Labels", x = "Sentiment", y = "Count")
+# Load necessary libraries
+library(quanteda)
+library(quanteda.textstats)
+library(wordcloud)
+library(caret)
+library(SnowballC)
+
+# 2. Identify frequent words in positive reviews and generate word cloud
+positive_reviews_corpus <- corpus(data[data$sentiment == "positive", "review"])
+positive_reviews_dfm <- dfm(positive_reviews_corpus, remove = stopwords("english"), remove_punct = TRUE)
+positive_reviews_dfm <- dfm_trim(positive_reviews_dfm, min_termfreq = 5000) 
+
+# Get the frequency of terms in positive reviews
+positive_freq <- textstat_frequency(positive_reviews_dfm)
+top_positive_words <- head(positive_freq, 25) # Select top 25 words
+print(top_positive_words)
+
+# Generate word cloud
+set.seed(1234) # for reproducibility
+wordcloud(words = top_positive_words$feature, freq = top_positive_words$frequency,
+          max.words = 100, random.order = FALSE, colors = brewer.pal(8, "Dark2"))
 
