@@ -133,3 +133,9 @@ set.seed(1234) # for reproducibility
 wordcloud(words = top_positive_words$feature, freq = top_positive_words$frequency,
           max.words = 100, random.order = FALSE, colors = brewer.pal(8, "Dark2"))
 
+#3. Impact of review length on sentiment classification
+data$review_length <- ntoken(tokens(data$review))
+ggplot(data, aes(x = sentiment, y = review_length)) +
+  geom_boxplot() +
+  labs(title = "Review Length by Sentiment", x = "Sentiment", y = "Review Length")
+
