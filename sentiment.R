@@ -139,3 +139,22 @@ ggplot(data, aes(x = sentiment, y = review_length)) +
   geom_boxplot() +
   labs(title = "Review Length by Sentiment", x = "Sentiment", y = "Review Length")
 
+#4. Linguistic & Textual patterns differentiating positive and negative labels
+# Create a dfm for the entire dataset
+reviews_dfm <- dfm(corpus(data$review), remove = stopwords("english"), remove_punct = TRUE)
+
+# Calculate term frequencies by sentiment
+positive_dfm <- reviews_dfm[data$sentiment == "positive", ]
+negative_dfm <- reviews_dfm[data$sentiment == "negative", ]
+positive_freq <- textstat_frequency(positive_dfm)
+negative_freq <- textstat_frequency(negative_dfm)
+
+# Compare term frequencies
+term_freq_comparison <- merge(positive_freq, negative_freq, by = "feature")
+term_freq_comparison$difference <- abs(term_freq_comparison$frequency.x - term_freq_comparison$frequency.y)
+
+# Sort by the absolute difference to find terms that differentiate the sentiments
+term_freq_comparison <- term_freq_comparison[order(term_freq_comparison$difference, decreasing = TRUE), ]
+
+# Look at the top terms
+head(term_freq_comparison)
