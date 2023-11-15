@@ -158,3 +158,19 @@ term_freq_comparison <- term_freq_comparison[order(term_freq_comparison$differen
 
 # Look at the top terms
 head(term_freq_comparison)
+
+
+#Building model
+library(quanteda)
+# Create a dfm for the entire dataset
+dfm_data <- dfm(data$review, tolower = FALSE) 
+set.seed(123) 
+train_indices <- sample(seq_len(nrow(dfm_data)), size = 0.8 * nrow(dfm_data))
+
+# Split the dfm
+train_dfm <- dfm_data[train_indices, ]
+test_dfm <- dfm_data[-train_indices, ]
+
+# Split the labels
+train_labels <- data$sentiment[train_indices]
+test_labels <- data$sentiment[-train_indices]
