@@ -197,3 +197,17 @@ conf_matrix_lr <- table(Predictions = predictions_lr, Actual = test_labels)
 print(conf_matrix_lr)
 accuracy_lr <- sum(diag(conf_matrix_lr)) / sum(conf_matrix_lr)
 cat("Logistic Regression Accuracy:", accuracy_lr, "\n")
+
+# Train the SVM model
+library(e1071)
+model_svm <- svm(train_dfm, as.factor(train_labels), kernel = "linear")
+# Make predictions
+predictions_svm <- predict(model_svm, test_dfm)
+
+# Confusion Matrix
+conf_matrix_svm <- table(Predictions = predictions_svm, Actual = test_labels)
+print(conf_matrix_svm)
+
+# Calculate accuracy
+accuracy_svm <- sum(diag(conf_matrix_svm)) / sum(conf_matrix_svm)
+cat("SVM Accuracy:", accuracy_svm, "\n")
