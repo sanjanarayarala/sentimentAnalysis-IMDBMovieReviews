@@ -211,3 +211,33 @@ print(conf_matrix_svm)
 # Calculate accuracy
 accuracy_svm <- sum(diag(conf_matrix_svm)) / sum(conf_matrix_svm)
 cat("SVM Accuracy:", accuracy_svm, "\n")
+
+library(pROC)
+
+# Calculate ROC curve and AUC for Naive Bayes Classifier
+roc_obj <- roc(response = test_labels, predictor = as.numeric(predictions))
+
+# Plotting ROC curve
+plot(roc_obj, main = "ROC Curve for Naive Bayes Classifier")
+# Calculate AUC
+auc_value <- auc(roc_obj)
+cat("AUC:", auc_value, "\n")
+
+# Calculate ROC curve and AUC for Logistic Regression Model
+roc_obj <- roc(response = test_labels, predictor = as.numeric(predictions_lr))
+
+# Plotting ROC curve
+plot(roc_obj, main = "ROC Curve for Logistic Regression Model")
+# Calculate AUC
+auc_value <- auc(roc_obj)
+cat("AUC:", auc_value, "\n")
+
+# Calculate ROC curve and AUC for Support Vector Machine 
+roc_obj <- roc(response = test_labels, predictor = as.numeric(predictions_svm))
+
+# Plotting ROC curve
+plot(roc_obj, main = "ROC Curve for Support vector machine model")
+# Calculate AUC
+auc_value <- auc(roc_obj)
+cat("AUC:", auc_value, "\n")
+
