@@ -241,3 +241,6 @@ plot(roc_obj, main = "ROC Curve for Support vector machine model")
 auc_value <- auc(roc_obj)
 cat("AUC:", auc_value, "\n")
 
+##Achieved accuracy for Logistic Regression is 0.8718362!!
+# Save the trained logistic regression model to a file
+saveRDS(model_lr, file = "logistic_regression_model.rds")
