@@ -161,7 +161,7 @@ head(term_freq_comparison)
 
 
 #Building model
-library(quanteda)
+#1. Split train and test data
 # Create a dfm for the entire dataset
 dfm_data <- dfm(data$review, tolower = FALSE) 
 set.seed(123) 
@@ -174,3 +174,26 @@ test_dfm <- dfm_data[-train_indices, ]
 # Split the labels
 train_labels <- data$sentiment[train_indices]
 test_labels <- data$sentiment[-train_indices]
+
+#Train Naive bayes classifier
+library(quanteda.textmodels)
+
+model_nb <- textmodel_nb(train_dfm, train_labels)
+predictions <- predict(model_nb, newdata = test_dfm)
+
+# Confusion Matrix
+conf_matrix <- table(Predictions = predictions, Actual = test_labels)
+print(conf_matrix)
+
+# Calculate accuracy
+accuracy <- sum(diag(conf_matrix)) / sum(conf_matrix)
+cat("Accuracy:", accuracy, "\n")
+
+# Train Logistic Regression model
+model_lr <- textmodel_lr(train_dfm, y = train_labels)
+predictions_lr <- predict(model_lr, newdata = test_dfm)
+
+conf_matrix_lr <- table(Predictions = predictions_lr, Actual = test_labels)
+print(conf_matrix_lr)
+accuracy_lr <- sum(diag(conf_matrix_lr)) / sum(conf_matrix_lr)
+cat("Logistic Regression Accuracy:", accuracy_lr, "\n")
