@@ -18,6 +18,14 @@ function(req){
   # Make a prediction
   prediction <- predict(model_lr, newdata = processed_review, type = "prob")
   
-  ##Extract probabilities
+  # Extract probabilities
+  positive_prob <- prediction[,"positive"]
+  negative_prob <- prediction[,"negative"]
   
+  # Determine sentiment label
+  sentiment <- ifelse(positive_prob > negative_prob, "positive", "negative")
+  probability <- max(positive_prob, negative_prob)
+  
+  # Return the result as JSON
+  return(list(sentiment = sentiment, probability = probability))
 }
